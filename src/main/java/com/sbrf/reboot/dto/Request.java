@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Data
@@ -13,6 +12,7 @@ public class Request {
 
     private String atmNumber;
 
+    //for xml un-marshal
     public Request() {}
 
     @JsonCreator
