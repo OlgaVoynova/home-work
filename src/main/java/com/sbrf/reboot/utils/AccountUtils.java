@@ -60,4 +60,8 @@ public class AccountUtils {
     private static Comparator<Account> getComparatorByIdDateBalance () {
         return Comparator.comparing(Account::getId).thenComparing(Account::getCreateDate).thenComparing(Account::getBalance);
     }
+
+    public static Comparator<Account> getComparatorByBalance () {
+        return Comparator.comparing(Account::getBalance);
+    }
 }

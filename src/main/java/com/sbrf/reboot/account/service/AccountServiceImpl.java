@@ -2,11 +2,16 @@ package com.sbrf.reboot.account.service;
 
 import com.sbrf.reboot.account.entity.Account;
 import com.sbrf.reboot.account.repository.AccountRepository;
-import com.sbrf.reboot.account.repository.AccountRepositoryImpl;
 
+import com.sbrf.reboot.utils.AccountUtils;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
@@ -50,4 +55,21 @@ public class AccountServiceImpl implements AccountService {
         return count;
     }
 
+    @Override
+    public Account getMaxAccountBalance(Integer clientId) {
+        return accountRepositoryImpl.getAllAccountsByClientId(clientId)
+                .stream()
+                .max(AccountUtils.getComparatorByBalance())
+                .orElse(null);
+    }
+
+    @Override
+    public Set<Account> getAllAccountsByDateMoreThen(Integer clientId, LocalDate date) {
+        return accountRepositoryImpl.getAllAccountsByClientId(clientId)
+                .stream()
+                .filter(x -> x.getCreateDate().isAfter(date))
+                .collect(Collectors.toSet());
+    }
+
 }
+
