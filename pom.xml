@@ -30,7 +30,12 @@
         <lombok.version>1.18.20</lombok.version>
         <junit-jupiter.version>5.7.2</junit-jupiter.version>
         <mockito-core.version>3.11.2</mockito-core.version>
+
+        <jackson-databind.version>2.12.4</jackson-databind.version>
+        <jackson-dataformat-xml.version>2.11.1</jackson-dataformat-xml.version>
+
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+
     </properties>
 
     <dependencies>
@@ -51,6 +56,43 @@
             <artifactId>mockito-core</artifactId>
             <version>${mockito-core.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>${jackson-dataformat-xml.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.12.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.12.4</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- API -->
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>2.3.3</version>
+        </dependency>
+
+        <!-- runtime -->
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>2.3.5</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
