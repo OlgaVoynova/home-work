@@ -2,10 +2,14 @@ package com.sbrf.reboot.utils;
 
 import com.sbrf.reboot.account.entity.Account;
 import com.sbrf.reboot.client.entity.Client;
+import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,8 +44,23 @@ public class MainReport {
         return sum;
     };
 
-    public static BigDecimal getTotalsWithReact (Stream<Client> customers) {
-        return BigDecimal.ZERO;
+    public static BigDecimal getTotalsWithReact (Stream<Client> customers, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo) {
+        System.out.println("Время старта параллельного подсчета REACTOR: "  + LocalTime.now());
+        BigDecimal sum = BigDecimal.ZERO;
+        Set<Account> distinctGoodAccounts = new HashSet<>();
+        Scheduler scheduler = Schedulers.newParallel("parallelFluxScheduler");
+        Flux.fromStream(customers)
+                .parallel()
+                .runOn(scheduler)
+                .map(customer -> getAccountIfClientOk(customer,dateFrom,dateTo,ageFrom,ageTo))
+                .subscribe(distinctGoodAccounts::addAll);
+        for (Account account : distinctGoodAccounts) {
+            sum = sum.add(account.getBalance());
+        }
+        /* Надо принудительно завершить, иначе наше приложение остается работать даже после окончания работы потока Main*/
+        scheduler.dispose();
+        System.out.println("Время окончания параллельного подсчета REACTOR: "  + LocalTime.now());
+        return sum;
     }
 
     private static CompletableFuture<Set<Account>> getBalanceSubFlow (Client client, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo) {
@@ -52,6 +71,19 @@ public class MainReport {
             }
             return goodAccounts;
         });
+    }
+
+    private static Set<Account> getAccountIfClientOk (Client client, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo) {
+        Set<Account> accounts = new HashSet<>();
+        if (client.getAge() > ageFrom && client.getAge() < ageTo) {
+            for (Account account : client.getAccounts()) {
+               if (account.getCreateDate().isAfter(dateFrom)
+                       && account.getCreateDate().isBefore(dateTo)) {
+                   accounts.add(account);
+               }
+            }
+        }
+        return accounts;
     }
 
 }

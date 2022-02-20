@@ -26,11 +26,13 @@ public class Main {
 
         BigDecimal sumTest = sumBalanceNonParallel(repository,LocalDate.of(2021,7,1),LocalDate.of(2021,8,1),18,30);
         BigDecimal sumParallel = MainReport.getTotalsWithCompletableFuture(repository.getCustomersStream(),LocalDate.of(2021,7,1),LocalDate.of(2021,8,1),18,30);
+        BigDecimal sumReactor = MainReport.getTotalsWithReact(repository.getCustomersStream(),LocalDate.of(2021,7,1),LocalDate.of(2021,8,1),18,30);
         System.out.println(sumParallel);
         System.out.println(sumTest);
-
+        System.out.println(sumReactor);
 
     }
+
     private static BigDecimal sumBalanceNonParallel (ClientRepository repository, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo) {
         System.out.println("Время старта последовательного подсчета: "  + LocalTime.now());
         BigDecimal sum = BigDecimal.ZERO;

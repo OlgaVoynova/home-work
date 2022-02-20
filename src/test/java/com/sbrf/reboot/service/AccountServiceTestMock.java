@@ -53,11 +53,8 @@ class AccountServiceTestMock {
 
     @Test
     void testCountEmptyAccounts() {
-
-
         when((accountRepositoryImpl.getAllAccountsByClientId(null))).thenReturn(accounts);
-
-
         assertEquals(accounts.size(),accountService.countEmptyAccounts());
     }
+
 }

@@ -6,6 +6,7 @@ import com.sbrf.reboot.client.repository.ClientRepository;
 import com.sbrf.reboot.utils.MainReport;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import reactor.core.publisher.Flux;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -53,6 +54,13 @@ public class GetBalanceFromGoodAccountsTest {
         }
         System.out.println("Время окончания последовательного подсчета: "  + LocalTime.now());
         return sum;
+    }
+
+    @Test
+    public void sumBalanceByFluxTest() {
+        createData();
+        BigDecimal sumTest = sumBalanceNonParallel(LocalDate.of(2021,7,1),LocalDate.of(2021,8,1),18,30);
+        Assertions.assertEquals(sumTest, MainReport.getTotalsWithReact(repository.getCustomersStream(),LocalDate.of(2021,7,1),LocalDate.of(2021,8,1),18,30));
     }
 
 
